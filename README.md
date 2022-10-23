@@ -17,6 +17,6 @@ cd EXMA
 - From your facebook data folder, copy/move the `inbox` folder into the `place-inbox-here`.
 - Run the script
 ```bash
-python3 ./extractImages.py
+python3 ./extractAttachments.py
 ```
 - All your images should eventually end up the output folder, inside a folder named after the date and time you extracted the data.
