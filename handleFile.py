@@ -6,7 +6,7 @@ import exiftool
 from hashlib import sha256
 from datetime import datetime
 
-def getFilePaths(conversation_path, file_data, file_type):
+def getFilePaths(conversation_path, file_data, file_type, extract_time):
     original_file_name = file_data['uri'].split('/')[-1]
     original_file_path =f'{conversation_path}/{file_type}/{original_file_name}'
     created_date = datetime.fromtimestamp(file_data['creation_timestamp'])
@@ -14,7 +14,7 @@ def getFilePaths(conversation_path, file_data, file_type):
     file_format = file_data['uri'].split('/')[-1].split(".")[-1]
     new_file_name = f'{created_date.strftime("%Y-%m-%dT%H%M%S")}-{salt_string}.{file_format}'
     
-    output_folder_path = f'./{OUTPUT_FOLDER_NAME}/{datetime.now().strftime("%Y-%m-%dT%H%M")}'
+    output_folder_path = f'./{OUTPUT_FOLDER_NAME}/{extract_time}'
     new_file_path = f'{output_folder_path}/{new_file_name}'
     
     if not os.path.exists(output_folder_path):
@@ -25,8 +25,8 @@ def getFilePaths(conversation_path, file_data, file_type):
         'new': new_file_path
     }
 
-def handleJpgFile(conversation_path, file_data):
-    paths = getFilePaths(conversation_path, file_data, PHOTOS_TAG)
+def handleJpgFile(conversation_path, file_data, extract_time):
+    paths = getFilePaths(conversation_path, file_data, PHOTOS_TAG, extract_time)
     # Modify metadata
     original = None
     with open(paths['original'], 'rb') as original_file:
@@ -38,8 +38,8 @@ def handleJpgFile(conversation_path, file_data):
     with open(paths['new'], 'wb') as new_file:
         new_file.write(original.get_file())
         
-def handlePngFile(conversation_path, file_data):
-    paths = getFilePaths(conversation_path, file_data, PHOTOS_TAG)
+def handlePngFile(conversation_path, file_data, extract_time):
+    paths = getFilePaths(conversation_path, file_data, PHOTOS_TAG, extract_time)
     with open(paths['original'], 'rb') as original_file, open(paths['new'], 'wb') as new_file:
         new_file.write(original_file.read())
     
@@ -54,8 +54,8 @@ def handlePngFile(conversation_path, file_data):
         img.modify_exif(exifData)
         img.modify_xmp(xmpData)
 
-def handleMp4File(conversation_path, file_data):
-    paths = getFilePaths(conversation_path, file_data, VIDEOS_TAG)
+def handleMp4File(conversation_path, file_data, extract_time):
+    paths = getFilePaths(conversation_path, file_data, VIDEOS_TAG, extract_time)
     date_formatted = datetime.fromtimestamp(file_data['creation_timestamp']).strftime("%Y:%m:%d %H:%M:%S")
     
     with open(paths['original'], 'rb') as original_file, open(paths['new'], 'wb') as new_file:

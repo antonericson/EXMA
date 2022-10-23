@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 import json
 from glob import glob
+from datetime import datetime
 from handleFile import handleJpgFile, handlePngFile, handleMp4File 
 from constants import *
+from findDuplicates import check_for_duplicates
 
 def main():
+    extract_time = datetime.now().strftime("%Y-%m-%dT%H%M")
     conversations = glob(f'{DATA_PATH}/*', recursive=True)
 
     for conversation_path in conversations:
@@ -21,13 +24,15 @@ def main():
                     if PHOTOS_TAG in msg:
                         for photo_data in msg[PHOTOS_TAG]:
                             if photo_data['uri'].split('/')[-1].split(".")[-1] == 'jpg':
-                                handleJpgFile(conversation_path, photo_data)
+                                handleJpgFile(conversation_path, photo_data, extract_time)
                             else:
-                                handlePngFile(conversation_path, photo_data)
+                                handlePngFile(conversation_path, photo_data, extract_time)
                                 
                     if VIDEOS_TAG in msg:
                         for video_data in msg[VIDEOS_TAG]:
-                            handleMp4File(conversation_path, video_data)
+                            handleMp4File(conversation_path, video_data, extract_time)
+        
+        check_for_duplicates(f'output/{extract_time}')
                         
 if __name__ == "__main__":
     main()                    
