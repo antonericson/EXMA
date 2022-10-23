@@ -35,7 +35,6 @@ def check_for_duplicates(path, hash=hashlib.sha1):
     for dirpath, dirnames, filenames in os.walk(path):
         # get all files that have the same size - they are the collision candidates
         for filename in filenames:
-            print(filename)
             full_path = os.path.join(dirpath, filename)
             try:
                 # if the target is a symlink (soft one), this will 
@@ -76,7 +75,6 @@ def check_for_duplicates(path, hash=hashlib.sha1):
                     print("Duplicate found: {} and {}".format(filename, duplicate))
                     os.rename(duplicate, filename.replace('.jpg', '_duplicate.jpg').replace('.mp4', '_duplicate.mp4').replace('.png', '_duplicate.png'))
                 else:
-                    print("NOT DUPLICATE")
                     hashes_full[full_hash] = filename
             except (OSError,):
                 # the file access might've changed till the exec point got here 

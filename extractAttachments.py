@@ -24,15 +24,22 @@ def main():
                     if PHOTOS_TAG in msg:
                         for photo_data in msg[PHOTOS_TAG]:
                             if photo_data['uri'].split('/')[-1].split(".")[-1] == 'jpg':
-                                handleJpgFile(conversation_path, photo_data, extract_time)
-                            else:
-                                handlePngFile(conversation_path, photo_data, extract_time)
-                                
+                                try:
+                                    handleJpgFile(conversation_path, photo_data, extract_time)
+                                except (RuntimeError, IsADirectoryError):
+                                    print(f'Error for: {photo_data["uri"]}')
+                            elif photo_data['uri'].split('/')[-1].split(".")[-1] == 'png':
+                                try:
+                                    handlePngFile(conversation_path, photo_data, extract_time)
+                                except (RuntimeError, IsADirectoryError):
+                                    print(f'Error for: {photo_data["uri"]}')
                     if VIDEOS_TAG in msg:
                         for video_data in msg[VIDEOS_TAG]:
-                            handleMp4File(conversation_path, video_data, extract_time)
-        
-        check_for_duplicates(f'output/{extract_time}')
+                            try:
+                                handleMp4File(conversation_path, video_data, extract_time)
+                            except (RuntimeError, IsADirectoryError):
+                                    print(f'Error for: {video_data["uri"]}')
+    check_for_duplicates(f'output/{extract_time}')
                         
 if __name__ == "__main__":
     main()                    
