@@ -12,7 +12,7 @@ All attachments will be tagged with their "creation date" according to the messa
 
 ```bash
 git clone ...
-cd extract-fb-images
+cd EXMA
 ```
 - From your facebook data folder, copy/move the `inbox` folder into the `place-inbox-here`.
 - Run the script
