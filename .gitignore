@@ -3,7 +3,6 @@ fb-data/*
 output/*
 place-inbox-here/*
 !place-inbox-here/.gitkeep
-!test-data/.gitkeep
 !output/.gitkeep
 
 # Generic python catch-all ignores
